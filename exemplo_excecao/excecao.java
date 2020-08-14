@@ -5,9 +5,18 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class excecao {
-   
-        public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) {
+        metodo1();
+        System.out.println("fim do programa");
+    }
+      public static void metodo1(){
+          System.out.println("Iniciando metodo 1");
+          metodo2();
+          System.out.println("Fim do metodo 1");
+      }
+        public static void metodo2(){
+            System.out.println("Iniciando metodo 2");
+          Scanner sc = new Scanner(System.in);
 
         try {
             String[] vetor = sc.nextLine().split(" ");
@@ -20,9 +29,10 @@ public class excecao {
         catch (ArrayIndexOutOfBoundsException e){
             System.out.println("Indice inexistente");
         }
-
-        System.out.println("Fim do prorama");
+            System.out.println("Fim do metodo 2");
+        }
+       
 
     }
-    }
+
 
