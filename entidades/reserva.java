@@ -1,18 +1,25 @@
 
 package entidades;
 
+import excecao.dominioExcecao;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class reserva {
-    private int numeroreserva;
+
+   private int numeroreserva;
     private Date checkin;
     private Date checkout;
-    
-    private static SimpleDateFormat dsf = new SimpleDateFormat("dd/mm/yyyy");
 
-    public reserva(int numeroreserva, Date checkin, Date checkout) {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
+
+    public reserva(int numeroreserva, Date checkin, Date checkout) throws dominioExcecao {
+        if (!checkout.after(checkin)){
+            throw new dominioExcecao("Erro na reserva,"
+                    + " a data de Check-out"
+                    + " precisa ser depois da data de Check-in");
+        }
         this.numeroreserva = numeroreserva;
         this.checkin = checkin;
         this.checkout = checkout;
@@ -34,25 +41,36 @@ public class reserva {
         this.numeroreserva = numeroreserva;
     }
 
-    public long duracao(){
+    public long duracao() {
         long diff = checkout.getTime() - checkin.getTime();
-    return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public void atulizareserva(Date checkin, Date checkout){
-        this.checkin=checkin;
+    public void atualizareserva(Date checkin, Date checkout) throws dominioExcecao{
+        Date now = new Date();
+        if (checkin.before(now) || checkout.before(now)) {
+            throw new dominioExcecao("Erro na reserva,"
+                    + " as datas para atualização"
+                    + " precisam ser futuras");
+        } else if (!checkout.after(checkin)) {
+           throw new dominioExcecao("Erro na reserva,"
+                    + " a data de Check-out"
+                    + " precisa ser depois da data de Check-in");
+        }
+        this.checkin = checkin;
         this.checkout = checkout;
+        
     }
 
     @Override
     public String toString() {
-        return "reserva{" + "numero reserva=" + numeroreserva + ", checkin=" + dsf.format(checkin) + ", checkout=" + dsf.format(checkout) + ", quantidade de noites: "+duracao() +'}';
+        return "Numero da reserva=" + numeroreserva + ",Data de checkin="
+                + sdf.format(checkin)
+                + ", Data de checkout=" + sdf.format(checkout)
+                + ", " + duracao() + " noites";
     }
-
-    public void atualizareserva(Date checkin, Date checkout) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
 
 }
+    
+
+
